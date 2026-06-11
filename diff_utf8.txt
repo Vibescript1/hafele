@@ -1,0 +1,946 @@
+﻿diff --git a/src/App.tsx b/src/App.tsx
+index 075b74d..54dac67 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -14,6 +14,24 @@ import Close from "@washingtonpost/wpds-assets/asset/close";
+ 
+ // ΓöÇΓöÇ Animations ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ 
++const floatAnim = keyframes({
++  "0%, 100%": { transform: "translateY(0)" },
++  "50%": { transform: "translateY(-15px)" },
++});
++
++const pulseGlow = keyframes({
++  "0%": { boxShadow: "0 0 0 0 rgba(139, 92, 246, 0.4)" },
++  "70%": { boxShadow: "0 0 0 15px rgba(139, 92, 246, 0)" },
++  "100%": { boxShadow: "0 0 0 0 rgba(139, 92, 246, 0)" },
++});
++
++const gradientShift = keyframes({
++  "0%": { backgroundPosition: "0% 50%" },
++  "50%": { backgroundPosition: "100% 50%" },
++  "100%": { backgroundPosition: "0% 50%" },
++});
++
++
+ const fadeUp = keyframes({
+   from: { opacity: 0, transform: "translateY(40px)" },
+   to: { opacity: 1, transform: "translateY(0)" },
+@@ -78,52 +96,83 @@ const SiteWrapper = styled("div", {
+ 
+ // ΓöÇΓöÇ Navbar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ 
+-const NavBar = styled("header", {
+-  position: "fixed",
++const HeaderWrap = styled("div", {
++  position: "sticky",
+   top: 0,
+-  left: 0,
+-  right: 0,
+   zIndex: "$shell",
++});
++
++const marqueeScroll = keyframes({
++  "0%": { transform: "translateX(0)" },
++  "100%": { transform: "translateX(-50%)" },
++});
++
++const TopBar = styled("div", {
++  backgroundColor: "#000000",
++  color: "#ffffff",
++  fontFamily: "$meta",
++  fontSize: "$087",
++  padding: "$050 0",
++  overflow: "hidden",
++  whiteSpace: "nowrap",
++  display: "flex",
++  alignItems: "center",
++  width: "100%",
++});
++
++const MarqueeTrack = styled("div", {
++  display: "flex",
++  width: "max-content",
++  animation: `${marqueeScroll} 40s linear infinite`,
++  willChange: "transform",
++  "&:hover": {
++    animationPlayState: "paused",
++  }
++});
++
++const MarqueeText = styled("span", {
++  display: "inline-block",
++  paddingRight: "50px",
++  whiteSpace: "nowrap",
++});
++
++const NavBar = styled("header", {
++  position: "relative",
+   display: "flex",
+   alignItems: "center",
+   justifyContent: "space-between",
+-  px: "$200",
+-  height: "64px",
+-  backdropFilter: "blur(12px)",
+-  WebkitBackdropFilter: "blur(12px)",
+-  transition: "background 0.3s ease, box-shadow 0.3s ease",
+-  "@sm": { px: "$100" },
++  px: "$100",
++  height: "56px",
++  backgroundColor: "#ffffff",
++  transition: "box-shadow 0.3s ease",
++  "@sm": { px: "$050" },
+   variants: {
+     scrolled: {
+       true: {
+-        backgroundColor: "rgba(255,255,255,0.93)",
+         boxShadow: "$300",
+       },
+       false: {
+-        backgroundColor: "transparent",
++        boxShadow: "none",
+       },
+     },
+   },
+ });
+ 
+ const LogoText = styled("a", {
+-  fontFamily: "$headline",
+-  fontWeight: "$bold",
+-  fontSize: "$175",
++  display: "flex",
++  alignItems: "center",
+   textDecoration: "none",
+-  letterSpacing: "-0.02em",
+-  transition: "color 0.3s ease",
+-  variants: {
+-    light: {
+-      true: { color: "#ffffff" },
+-      false: { color: "$primary" },
+-    },
+-  },
++});
++
++const LogoImg = styled("img", {
++  height: "56px",
++  objectFit: "contain",
++  "@sm": { height: "44px" },
+ });
+ 
+ const DesktopNav = styled("nav", {
+   display: "flex",
+-  gap: "$150",
++  gap: "$100",
+   alignItems: "center",
+   "@sm": { display: "none" },
+   "@md": { display: "none" },
+@@ -146,6 +195,24 @@ const NavLink = styled("a", {
+   },
+ });
+ 
++const IconGroup = styled("div", {
++  display: "flex",
++  alignItems: "center",
++  gap: "$075",
++});
++
++const IconButton = styled("button", {
++  background: "none",
++  border: "none",
++  cursor: "pointer",
++  padding: "$025",
++  display: "flex",
++  alignItems: "center",
++  justifyContent: "center",
++  color: "$primary",
++  "&:hover": { color: "$cta" },
++});
++
+ const HamburgerBtn = styled("button", {
+   display: "none",
+   background: "none",
+@@ -160,16 +227,24 @@ const HamburgerBtn = styled("button", {
+ 
+ const MobileOverlay = styled("div", {
+   position: "fixed",
+-  inset: 0,
++  top: 0,
++  bottom: 0,
++  right: 0,
++  width: "80%",
++  maxWidth: "320px",
+   zIndex: "$offer",
+-  backgroundColor: "$background",
++  backgroundColor: "rgba(9, 9, 11, 0.8)",
++  backdropFilter: "blur(20px)",
++  WebkitBackdropFilter: "blur(20px)",
++  borderLeft: "1px solid rgba(255,255,255,0.1)",
++  boxShadow: "-10px 0 40px rgba(0,0,0,0.5)",
+   display: "flex",
+   flexDirection: "column",
+   alignItems: "center",
+   justifyContent: "center",
+   gap: "$250",
+   transform: "translateX(100%)",
+-  transition: "transform 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
++  transition: "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+   variants: {
+     open: {
+       true: { transform: "translateX(0)" },
+@@ -191,45 +266,57 @@ const MobileLink = styled("a", {
+ 
+ const HeroSection = styled("section", {
+   position: "relative",
+-  minHeight: "100vh",
++  minHeight: "80vh",
+   display: "flex",
+   alignItems: "center",
+-  justifyContent: "center",
++  justifyContent: "flex-start",
+   overflow: "hidden",
+ });
+ 
+-const HeroBg = styled("div", {
++const HeroBgWrapper = styled("div", {
++  position: "absolute",
++  inset: 0,
++});
++
++const HeroBgImage = styled("div", {
+   position: "absolute",
+   inset: 0,
+-  backgroundImage: "url(/hero-chimney.webp)",
+   backgroundSize: "cover",
+-  backgroundPosition: "center",
++  backgroundPosition: "right center",
++  transition: "opacity 1s ease-in-out",
+   "&::after": {
+     content: '""',
+     position: "absolute",
+     inset: 0,
+-    background:
+-      "linear-gradient(135deg, rgba(8,12,22,0.85) 0%, rgba(8,12,22,0.58) 60%, rgba(8,12,22,0.38) 100%)",
++    background: "linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 35%, rgba(255,255,255,0) 80%)",
+   },
++  "@sm": {
++    backgroundPosition: "70% center",
++    "&::after": {
++      background: "linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 60%, rgba(255,255,255,0.4) 100%)",
++    }
++  }
+ });
+ 
+ const HeroContent = styled("div", {
+   position: "relative",
+   zIndex: 1,
+-  maxWidth: "780px",
+-  px: "$200",
+-  textAlign: "center",
+-  "@sm": { px: "$100" },
++  maxWidth: "700px",
++  paddingLeft: "10%",
++  paddingRight: "$200",
++  textAlign: "left",
++  "@sm": { px: "$100", paddingLeft: "$100" },
+ });
+ 
+-const Eyebrow = styled("p", {
++const Eyebrow = styled("div", {
+   fontFamily: "$meta",
+   fontWeight: "$bold",
+-  fontSize: "$075",
+-  letterSpacing: "0.18em",
+-  textTransform: "uppercase",
+-  color: "#f97316",
+-  marginBottom: "$100",
++  fontSize: "$100",
++  backgroundColor: "#333333",
++  color: "#ffffff",
++  display: "inline-block",
++  padding: "$050 $100",
++  marginBottom: "$150",
+   animation: `${fadeIn} 0.8s ease 0.2s both`,
+ });
+ 
+@@ -237,68 +324,79 @@ const HeroH1 = styled("h1", {
+   fontFamily: "$headline",
+   fontWeight: "$bold",
+   fontSize: "$400",
+-  lineHeight: "$headline",
+-  color: "#ffffff",
++  lineHeight: "1.2",
++  color: "#333333",
+   marginBottom: "$100",
+   animation: `${fadeUp} 0.9s ease 0.3s both`,
+-  "@sm": { fontSize: "$250" },
++  "@sm": { fontSize: "$225", lineHeight: "1.1" },
+   "@md": { fontSize: "$300" },
+ });
+ 
++const AccentSpan = styled("span", {
++  color: "#f97316",
++  display: "block",
++});
++
+ const HeroSub = styled("p", {
+   fontFamily: "$subhead",
+   fontWeight: "$regular",
+   fontSize: "$125",
+   lineHeight: "$body",
+-  color: "rgba(255,255,255,0.82)",
++  color: "#555555",
+   marginBottom: "$200",
+   animation: `${fadeUp} 0.9s ease 0.5s both`,
+   "@sm": { fontSize: "$100" },
+ });
+ 
+-const HeroCtas = styled("div", {
+-  display: "flex",
+-  gap: "$100",
+-  justifyContent: "center",
+-  flexWrap: "wrap",
+-  animation: `${fadeUp} 0.9s ease 0.7s both`,
+-});
+-
+-const FlameSpan = styled("span", {
+-  display: "inline-block",
+-  animation: `${flicker} 2.8s ease-in-out infinite`,
+-});
+-
+-const ScrollIndicator = styled("div", {
++const SliderDots = styled("div", {
+   position: "absolute",
+   bottom: "$150",
+-  left: "50%",
+-  transform: "translateX(-50%)",
+-  zIndex: 1,
+-  animation: `${fadeIn} 1s ease 1.5s both`,
++  left: "0",
++  right: "0",
+   display: "flex",
+-  flexDirection: "column",
+-  alignItems: "center",
+-  gap: "$050",
++  justifyContent: "center",
++  gap: "10px",
++  zIndex: 2,
++  animation: `${fadeIn} 1s ease 1.5s both`,
+ });
+ 
+-const ScrollLine = styled("div", {
+-  width: "1px",
+-  height: "48px",
+-  background: "linear-gradient(to bottom, rgba(255,255,255,0.6), transparent)",
++const Dot = styled("div", {
++  width: "12px",
++  height: "12px",
++  borderRadius: "50%",
++  backgroundColor: "rgba(200,200,200,0.6)",
++  cursor: "pointer",
++  transition: "all 0.3s ease",
++  "&:hover": { backgroundColor: "rgba(200,200,200,0.9)" },
++  variants: {
++    active: {
++      true: {
++        backgroundColor: "#ffffff",
++        boxShadow: "0 0 0 2px #f97316",
++      }
++    }
++  }
+ });
+ 
+ // ΓöÇΓöÇ Trust Bar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ 
+ const TrustBar = styled("div", {
+-  backgroundColor: "#0f172a",
++  backgroundColor: "#09090b",
+   py: "$100",
+   px: "$200",
+   display: "flex",
+   justifyContent: "center",
+   gap: "$300",
+   flexWrap: "wrap",
+-  "@sm": { gap: "$150", px: "$100" },
++  "@sm": { 
++    gap: "$150", 
++    px: "$100", 
++    flexWrap: "nowrap", 
++    justifyContent: "flex-start", 
++    overflowX: "auto", 
++    paddingBottom: "$100",
++    "&::-webkit-scrollbar": { display: "none" }
++  },
+ });
+ 
+ const TrustItem = styled("div", {
+@@ -314,11 +412,12 @@ const TrustItem = styled("div", {
+ });
+ 
+ const Pip = styled("span", {
++  animation: `${pulseGlow} 2s infinite`,
+   display: "inline-block",
+   width: "6px",
+   height: "6px",
+   borderRadius: "$round",
+-  backgroundColor: "#f97316",
++  backgroundColor: "#8b5cf6",
+   flexShrink: 0,
+ });
+ 
+@@ -329,7 +428,7 @@ const SectionInner = styled("div", {
+   mx: "auto",
+   px: "$200",
+   py: "$500",
+-  "@sm": { px: "$100", py: "$300" },
++  "@sm": { px: "$100", py: "$200" },
+ });
+ 
+ const SectionLabel = styled("p", {
+@@ -338,7 +437,7 @@ const SectionLabel = styled("p", {
+   fontSize: "$075",
+   letterSpacing: "0.18em",
+   textTransform: "uppercase",
+-  color: "#f97316",
++  color: "#8b5cf6",
+   marginBottom: "$075",
+ });
+ 
+@@ -363,7 +462,7 @@ const SectionLead = styled("p", {
+   lineHeight: "$body",
+   color: "$onBackground-subtle",
+   maxWidth: "580px",
+-  "@sm": { fontSize: "$100" },
++  "@sm": { fontSize: "$100", px: "$100" },
+ });
+ 
+ // ΓöÇΓöÇ Services grid ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+@@ -373,7 +472,7 @@ const ServicesGrid = styled("div", {
+   gridTemplateColumns: "repeat(2, 1fr)",
+   gap: "$150",
+   marginTop: "$300",
+-  "@sm": { gridTemplateColumns: "1fr" },
++  "@sm": { gridTemplateColumns: "1fr", gap: "$100" },
+   "@md": { gridTemplateColumns: "1fr" },
+ });
+ 
+@@ -383,7 +482,7 @@ const ServiceCard = styled("article", {
+   backgroundColor: "$surface",
+   overflow: "hidden",
+   transition: "transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s ease",
+-  "&:hover": { transform: "translateY(-6px)", boxShadow: "$400" },
++  "&:hover": { transform: "translateY(-10px)", boxShadow: "0 20px 25px -5px rgba(139, 92, 246, 0.2), 0 10px 10px -5px rgba(139, 92, 246, 0.1)" },
+   "&:hover .svc-img": { transform: "scale(1.05)" },
+ });
+ 
+@@ -406,7 +505,7 @@ const SvcTag = styled("span", {
+   fontWeight: "$bold",
+   letterSpacing: "0.1em",
+   textTransform: "uppercase",
+-  color: "#f97316",
++  color: "#8b5cf6",
+   display: "block",
+   marginBottom: "$075",
+ });
+@@ -449,7 +548,7 @@ const FeatureItem = styled("li", {
+ // ΓöÇΓöÇ Why us ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ 
+ const DarkBand = styled("section", {
+-  background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
++  background: "linear-gradient(135deg, #09090b 0%, #18181b 100%)",
+ });
+ 
+ const WhyGrid = styled("div", {
+@@ -461,7 +560,7 @@ const WhyGrid = styled("div", {
+   gridTemplateColumns: "1fr 1fr",
+   gap: "$400",
+   alignItems: "center",
+-  "@sm": { gridTemplateColumns: "1fr", px: "$100", py: "$300", gap: "$200" },
++  "@sm": { gridTemplateColumns: "1fr", px: "$100", py: "$200", gap: "$150" },
+   "@md": { gridTemplateColumns: "1fr", gap: "$200" },
+ });
+ 
+@@ -479,7 +578,7 @@ const WhyPhoto = styled("div", {
+     position: "absolute",
+     inset: 0,
+     borderRadius: "$075",
+-    border: "3px solid rgba(249,115,22,0.4)",
++    border: "3px solid rgba(139,92,246,0.4)",
+   },
+   "@sm": { height: "260px" },
+ });
+@@ -501,12 +600,12 @@ const WhyIconBox = styled("div", {
+   width: "44px",
+   height: "44px",
+   borderRadius: "$050",
+-  backgroundColor: "rgba(249,115,22,0.14)",
+-  border: "1px solid rgba(249,115,22,0.3)",
++  backgroundColor: "rgba(139,92,246,0.14)",
++  border: "1px solid rgba(139,92,246,0.3)",
+   display: "flex",
+   alignItems: "center",
+   justifyContent: "center",
+-  color: "#f97316",
++  color: "#8b5cf6",
+ });
+ 
+ const WhyTitle = styled("h4", {
+@@ -531,7 +630,7 @@ const ProcessGrid = styled("div", {
+   gridTemplateColumns: "repeat(4, 1fr)",
+   gap: "$150",
+   marginTop: "$300",
+-  "@sm": { gridTemplateColumns: "1fr" },
++  "@sm": { gridTemplateColumns: "1fr", gap: "$100" },
+   "@md": { gridTemplateColumns: "repeat(2,1fr)" },
+ });
+ 
+@@ -545,14 +644,14 @@ const StepNum = styled("div", {
+   width: "52px",
+   height: "52px",
+   borderRadius: "$round",
+-  border: "2px solid #f97316",
++  border: "2px solid #8b5cf6",
+   display: "flex",
+   alignItems: "center",
+   justifyContent: "center",
+   fontFamily: "$headline",
+   fontWeight: "$bold",
+   fontSize: "$150",
+-  color: "#f97316",
++  color: "#8b5cf6",
+   flexShrink: 0,
+ });
+ 
+@@ -581,7 +680,7 @@ const TestGrid = styled("div", {
+   gridTemplateColumns: "repeat(3, 1fr)",
+   gap: "$150",
+   marginTop: "$300",
+-  "@sm": { gridTemplateColumns: "1fr" },
++  "@sm": { gridTemplateColumns: "1fr", gap: "$100" },
+   "@md": { gridTemplateColumns: "1fr" },
+ });
+ 
+@@ -600,7 +699,7 @@ const TestCard = styled("div", {
+ const StarRow = styled("div", {
+   display: "flex",
+   gap: "$025",
+-  color: "#f97316",
++  color: "#8b5cf6",
+ });
+ 
+ const TestQuote = styled("blockquote", {
+@@ -628,13 +727,13 @@ const FaqWrap = styled("div", {
+   mx: "auto",
+   px: "$200",
+   py: "$500",
+-  "@sm": { px: "$100", py: "$300" },
++  "@sm": { px: "$100", py: "$200" },
+ });
+ 
+ // ΓöÇΓöÇ CTA Banner ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ 
+ const CtaBand = styled("section", {
+-  background: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)",
++  background: "linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%)",
+   py: "$400",
+   px: "$200",
+   textAlign: "center",
+@@ -666,7 +765,7 @@ const CtaSub = styled("p", {
+   color: "rgba(255,255,255,0.88)",
+   marginBottom: "$200",
+   position: "relative",
+-  "@sm": { fontSize: "$100" },
++  "@sm": { fontSize: "$100", px: "$100" },
+ });
+ 
+ const CtaRow = styled("div", {
+@@ -675,12 +774,13 @@ const CtaRow = styled("div", {
+   justifyContent: "center",
+   flexWrap: "wrap",
+   position: "relative",
++  "@sm": { flexDirection: "column" },
+ });
+ 
+ // ΓöÇΓöÇ Footer ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ 
+ const FooterWrap = styled("footer", {
+-  backgroundColor: "#0f172a",
++  backgroundColor: "#09090b",
+   py: "$400",
+   px: "$200",
+   "@sm": { px: "$100" },
+@@ -718,7 +818,7 @@ const FooterColHead = styled("h5", {
+   fontSize: "$075",
+   letterSpacing: "0.12em",
+   textTransform: "uppercase",
+-  color: "#f97316",
++  color: "#8b5cf6",
+   marginBottom: "$100",
+ });
+ 
+@@ -737,7 +837,7 @@ const FooterA = styled("a", {
+   color: "rgba(255,255,255,0.62)",
+   textDecoration: "none",
+   transition: "color 0.2s ease",
+-  "&:hover": { color: "#f97316" },
++  "&:hover": { color: "#8b5cf6" },
+ });
+ 
+ const FooterBottom = styled("div", {
+@@ -778,6 +878,107 @@ const AnimateDiv = styled("div", {
+     { visible: "true", anim: "slideRight", css: { animation: `${slideRight} 0.8s ease forwards` } },
+     { visible: "true", anim: "slideLeft", css: { animation: `${slideLeft} 0.8s ease forwards` } },
+     { visible: "true", anim: "scaleIn", css: { animation: `${scaleIn} 0.8s ease forwards` } },
++    { visible: "true", anim: "float", css: { animation: `${floatAnim} 3s ease-in-out infinite` } },
++    { visible: "true", anim: "pulseGlow", css: { animation: `${pulseGlow} 2s infinite` } },
++  ],
++});
++
++function Animate({
++  children,
++  anim = "fadeUp",
++  delay = 0,
++}: {
++  children: React.ReactNode;
++  anim?: "fadeUp" | "slideRight" | "slideLeft" | "scaleIn" | "float" | "pulseGlow";
++  delay?: number;
++}) {
++  const { ref, inView } = useInView();
++  return (
++    <AnimateDiv
++      ref={ref}
++      visible={inView ? "true" : undefined}
++      anim={anim}
++      css={delay ? { animationDelay: `${delay}ms` } : undefined}
++    >
++      {children}
++    </AnimateDiv>
++  );
++}
++
++// ΓöÇΓöÇ Data ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++
++const services = [
++  {
++    tag: "Chimney",
++    title: "Chimney Service & Sweep",
++    desc: "Professional chimney sweeping and annual servicing to keep your flue clear, safe, and efficient. We remove soot, debris, and blockages with minimal mess.",
++    image: "/hero-chimney.webp",
++    features: ["Annual sweep & inspection", "Certificate of service", "Flue condition report", "Bird guard fitting"],
++  },
++  {
++    tag: "Chimney",
++    title: "Chimney Repair & Repointing",
++    desc: "From cracked flaunching to crumbling mortar joints, our skilled masons restore your chimney stack to full structural integrity.",
++    image: "/chimney-repair.webp",
++    features: ["Repointing & flaunching", "Pot replacement", "Flashing repair", "Cowl installation"],
++  },
++  {
++    tag: "Gas Hob",
++    title: "Gas Hob Service",
++    desc: "Comprehensive gas hob servicing including burner cleaning, ignition testing, and safety checks to keep your cooker performing like new.",
++    image: "/gas-hob-service.webp",
++    features: ["Full burner clean", "Gas pressure check", "Ignition system test", "Safety certificate"],
++  },
++  {
++    tag: "Gas Hob",
++    title: "Gas Hob Repair",
++    desc: "Fast, reliable gas hob repairs by Gas Safe registered engineers. No ignition, uneven flames, or gas smell? We diagnose and fix it right.",
++    image: "/gas-hob-service.webp",
++    features: ["Same-day diagnosis", "Gas Safe registered", "All brands covered", "Parts supplied & fitted"],
++  },
++];
++
++const whyItems = [
++  {
++    title: "Gas Safe Registered",
++    text: "All our engineers hold a current Gas Safe registration card, shown on arrival for every job.",
++  },
++  {
++    title: "25+ Years Experience",
++    text: "Decades of hands-on expertise means we've seen every problem and know exactly how to solve it.",
++  },
++  {
++    title: "Same-Day Availability",
++    text: "Flexible scheduling including same-day and weekend appointments to fit around your life.",
++  },
++  {
++    title: "Guaranteed Work",
++    text: "Every job comes with a written guarantee. If it isn't right, we come back and fix it free of charge.",
++  },
++];
++
++const steps = [
++  { num: "1", title: "Book Online", text: "Fill in our quick booking form or give us a call. We'll confirm your slot within the hour." },
++  { num: "2", title: "Free Quote", text: "Our engineer assesses the job and provides a transparent, fixed-price quote ΓÇö no surprises." },
++  { num: "3", title: "Expert Service", text: "Fully qualified engineers carry out the work to the highest standard with minimal disruption." },
++  { num: "4", title: "Certificate", text: "You receive a signed service certificate and full warranty on all parts and labour." },
++];
++
++const testimonials = [
++  { text: "Booked KAFF for a chimney sweep and couldn't be happier. Arrived on time, covered everything with dust sheets, left immaculate. Highly recommend.", author: "James T., Homeowner" },
++  { text: "Had my gas hob repaired in under two hours. The engineer was professional, explained everything clearly, and the price was exactly as quoted. Brilliant.", author: "Sarah M., Customer" },
++  { text: "Used KAFF for an annual chimney service two years running. Consistent quality and great peace of mind knowing it's done properly.", author: "Robert H., Customer" },
++];
++
++const faqs = [
++  { q: "How often should I have my chimney swept?", a: "For regular wood-burning fires, at least once a year ΓÇö ideally before the winter season. For gas fires, every two years is recommended." },
++  { q: "Are your engineers Gas Safe registered?", a: "Yes. Every one of our engineers holds a current Gas Safe registration card, which they'll show you on arrival. All gas work is legally required to be carried out by a registered engineer." },
++  { q: "How long does a chimney sweep take?", a: "A standard chimney sweep takes between 45 minutes and 1.5 hours. We use specialist dust-control equipment so there's virtually no mess left behind." },
++  { q: "My gas hob burner isn't lighting ΓÇö repair or replacement?", a: "In most cases this is a simple repair ΓÇö igniter electrode or spark module. We diagnose on the first visit and give you an honest recommendation." },
++  { q: "Do you provide a certificate after the service?", a: "Yes. All chimney sweeps and gas hob services come with a printed certificate you can use for insurance purposes." },
++];
++
++    { visible: "true", anim: "pulseGlow", css: { animation: `${pulseGlow} 2s infinite` } },
+   ],
+ });
+ 
+@@ -787,7 +988,7 @@ function Animate({
+   delay = 0,
+ }: {
+   children: React.ReactNode;
+-  anim?: "fadeUp" | "slideRight" | "slideLeft" | "scaleIn";
++  anim?: "fadeUp" | "slideRight" | "slideLeft" | "scaleIn" | "float" | "pulseGlow";
+   delay?: number;
+ }) {
+   const { ref, inView } = useInView();
+@@ -863,9 +1064,9 @@ const steps = [
+ ];
+ 
+ const testimonials = [
+-  { text: "Booked Haffele for a chimney sweep and couldn't be happier. Arrived on time, covered everything with dust sheets, left immaculate. Highly recommend.", author: "James T., Homeowner" },
++  { text: "Booked KAFF for a chimney sweep and couldn't be happier. Arrived on time, covered everything with dust sheets, left immaculate. Highly recommend.", author: "James T., Homeowner" },
+   { text: "Had my gas hob repaired in under two hours. The engineer was professional, explained everything clearly, and the price was exactly as quoted. Brilliant.", author: "Sarah M., Customer" },
+-  { text: "Used Haffele for an annual chimney service two years running. Consistent quality and great peace of mind knowing it's done properly.", author: "Robert H., Customer" },
++  { text: "Used KAFF for an annual chimney service two years running. Consistent quality and great peace of mind knowing it's done properly.", author: "Robert H., Customer" },
+ ];
+ 
+ const faqs = [
+@@ -878,9 +1079,23 @@ const faqs = [
+ 
+ // ΓöÇΓöÇ App ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ 
++const heroImages = [
++  "/hero-oven.png",
++  "/cozy-kitchen-interior-design.jpg",
++  "/gas-hob-service.webp"
++];
++
+ export default function App() {
+   const [scrolled, setScrolled] = useState(false);
+   const [menuOpen, setMenuOpen] = useState(false);
++  const [currentSlide, setCurrentSlide] = useState(0);
++
++  useEffect(() => {
++    const timer = setInterval(() => {
++      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
++    }, 5000);
++    return () => clearInterval(timer);
++  }, []);
+ 
+   useEffect(() => {
+     const onScroll = () => setScrolled(window.scrollY > 60);
+@@ -903,88 +1118,85 @@ export default function App() {
+ 
+   return (
+     <SiteWrapper>
+-      {/* ΓöÇ Navbar ΓöÇ */}
+-      <NavBar scrolled={scrolled ? "true" : "false"}>
+-        <LogoText href="#" light={!scrolled ? "true" : "false"}>
+-          Haffele
+-        </LogoText>
+-        <DesktopNav>
+-          {navItems.map((n) => (
+-            <NavLink
+-              key={n.id}
+-              href={`#${n.id}`}
+-              light={!scrolled ? "true" : "false"}
+-              onClick={(e: React.MouseEvent) => { e.preventDefault(); goto(n.id); }}
+-            >
+-              {n.label}
+-            </NavLink>
+-          ))}
+-        </DesktopNav>
+-        <DesktopNav>
+-          <Button variant="cta" density="compact" onClick={() => goto("contact")}>
+-            Book Now
+-          </Button>
+-        </DesktopNav>
+-        <HamburgerBtn onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle navigation">
+-          <Icon size="150" label={menuOpen ? "Close" : "Menu"}>
+-            {menuOpen ? <Close /> : <Menu />}
+-          </Icon>
+-        </HamburgerBtn>
+-      </NavBar>
+-
+-      {/* ΓöÇ Mobile menu ΓöÇ */}
+-      <MobileOverlay open={menuOpen ? "true" : undefined} aria-hidden={!menuOpen}>
+-        {navItems.map((n) => (
+-          <MobileLink key={n.id} href={`#${n.id}`} onClick={(e: React.MouseEvent) => { e.preventDefault(); goto(n.id); }}>
+-            {n.label}
+-          </MobileLink>
+-        ))}
++      <HeaderWrap>
++        {/* ΓöÇ Top Announcement Bar ΓöÇ */}
++        <TopBar>
++          <MarqueeTrack>
++            <MarqueeText>
++              Please beware of fraudulent persons asking for advance UPI or other online payments on behalf of KAFF. We do not request any advance payments online to attend complaints, installations, demos, or site visits. KAFF will not be responsible for any loss due to such fraudulent activities. For genuine support, kindly contact only on KAFF official Customer Care Number.
++            </MarqueeText>
++            <MarqueeText>
++              Please beware of fraudulent persons asking for advance UPI or other online payments on behalf of KAFF. We do not request any advance payments online to attend complaints, installations, demos, or site visits. KAFF will not be responsible for any loss due to such fraudulent activities. For genuine support, kindly contact only on KAFF official Customer Care Number.
++            </MarqueeText>
++          </MarqueeTrack>
++        </TopBar>
++
++        {/* ΓöÇ Navbar ΓöÇ */}
++        <NavBar scrolled={scrolled ? "true" : "false"}>
++          <LogoText href="#">
++            <LogoImg src="/logo-removebg-preview.png" alt="KAFF Logo" />
++          </LogoText>
++          <DesktopNav>
++            {navItems.map((n) => (
++              <NavLink
++                key={n.id}
++                href={`#${n.id}`}
++                light="false"
++                onClick={(e: React.MouseEvent) => { e.preventDefault(); goto(n.id); }}
++              >
++                {n.label}
++              </NavLink>
++            ))}
++          </DesktopNav>
++          <IconGroup>
++            <IconButton aria-label="Location">
++              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
++            </IconButton>
++            <IconButton aria-label="Search">
++              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
++            </IconButton>
++            <IconButton aria-label="Profile">
++              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
++            </IconButton>
++            <IconButton aria-label="Cart">
++              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
++            </IconButton>
++            <HamburgerBtn onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle navigation">
++              <Icon size="150" label={menuOpen ? "Close" : "Menu"}>
++                {menuOpen ? <Close /> : <Menu />}
++              </Icon>
++            </HamburgerBtn>
++          </IconGroup>
++        </NavBar>
++      </HeaderWrap>
++
+         <Button variant="cta" onClick={() => goto("contact")}>
+           Book Now
+         </Button>
+       </MobileOverlay>
+ 
+       {/* ΓöÇ Hero ΓöÇ */}
+-      <HeroSection id="home" aria-label="Welcome to Haffele">
+-        <HeroBg aria-hidden />
++      <HeroSection id="home" aria-label="Welcome to KAFF">
++        <HeroBgWrapper aria-hidden>
++          {heroImages.map((src, i) => (
++            <HeroBgImage key={src} style={{ backgroundImage: `url(${src})`, opacity: i === currentSlide ? 1 : 0 }} />
++          ))}
++        </HeroBgWrapper>
+         <HeroContent>
+-          <Eyebrow>Chimney &amp; Gas Hob Specialists</Eyebrow>
++          <Eyebrow>Built-In Microwave &amp; Oven</Eyebrow>
+           <HeroH1>
+-            Expert Care for <FlameSpan>Every</FlameSpan> Flame in Your Home
++            From baking to roasting,
++            <AccentSpan>all made easy.</AccentSpan>
+           </HeroH1>
+           <HeroSub>
+-            Professional chimney sweeping, repair, and gas hob servicing by Gas Safe registered engineers. Safe, reliable, and always on time.
++            4 Cooking modes in one!
+           </HeroSub>
+-          <HeroCtas>
+-            <Button
+-              variant="cta"
+-              css={{ px: "$200", py: "$100", fontFamily: "$meta", fontWeight: "$bold", fontSize: "$100" }}
+-              onClick={() => goto("contact")}
+-            >
+-              Book a Service
+-            </Button>
+-            <Button
+-              variant="secondary"
+-              isOutline
+-              css={{
+-                px: "$200",
+-                py: "$100",
+-                fontFamily: "$meta",
+-                fontWeight: "$bold",
+-                fontSize: "$100",
+-                borderColor: "rgba(255,255,255,0.55)",
+-                color: "#ffffff",
+-                "&:hover": { backgroundColor: "rgba(255,255,255,0.1)", borderColor: "#ffffff" },
+-              }}
+-              onClick={() => goto("services")}
+-            >
+-              Our Services
+-            </Button>
+-          </HeroCtas>
+         </HeroContent>
+-        <ScrollIndicator aria-hidden>
+-          <ScrollLine />
+-        </ScrollIndicator>
++        <SliderDots>
++          {heroImages.map((_, i) => (
++            <Dot key={i} active={i === currentSlide ? "true" : undefined} onClick={() => setCurrentSlide(i)} />
++          ))}
++        </SliderDots>
+       </HeroSection>
+ 
+       {/* ΓöÇ Trust bar ΓöÇ */}
+@@ -1038,11 +1250,11 @@ export default function App() {
+       <DarkBand id="why-us" aria-labelledby="why-h2">
+         <WhyGrid>
+           <Animate anim="slideRight">
+-            <WhyPhoto role="img" aria-label="Haffele professional engineers" />
++            <WhyPhoto role="img" aria-label="KAFF professional engineers" />
+           </Animate>
+           <WhyItems>
+             <Animate anim="slideLeft">
+-              <SectionLabel>Why Haffele</SectionLabel>
++              <SectionLabel>Why KAFF</SectionLabel>
+               <SectionH2 id="why-h2" css={{ color: "#ffffff" }}>
+                 The Trusted Choice for Home Safety
+               </SectionH2>
+@@ -1151,7 +1363,7 @@ export default function App() {
+               variant="primary"
+               css={{
+                 backgroundColor: "#ffffff",
+-                color: "#f97316",
++                color: "#8b5cf6",
+                 fontFamily: "$meta",
+                 fontWeight: "$bold",
+                 fontSize: "$100",
+@@ -1187,7 +1399,7 @@ export default function App() {
+       <FooterWrap>
+         <FooterGrid>
+           <div>
+-            <FooterLogo>Haffele</FooterLogo>
++            <FooterLogo><LogoImg src="/logo-removebg-preview.png" alt="KAFF Logo" /></FooterLogo>
+             <FooterBlurb>
+               Professional chimney and gas hob service and repair. Gas Safe registered engineers you can trust.
+             </FooterBlurb>
+@@ -1204,13 +1416,13 @@ export default function App() {
+             <FooterColHead>Contact</FooterColHead>
+             <FooterList>
+               <li><FooterA href="tel:+441234567890">0800 000 0000</FooterA></li>
+-              <li><FooterA href="mailto:hello@haffele.co.uk">hello@haffele.co.uk</FooterA></li>
++              <li><FooterA href="mailto:hello@kaff.co.uk">hello@kaff.co.uk</FooterA></li>
+               <li><FooterA href="#">Mon ΓÇô Sat, 7am ΓÇô 7pm</FooterA></li>
+             </FooterList>
+           </div>
+         </FooterGrid>
+         <FooterBottom>
+-          <FooterSmall>┬⌐ {new Date().getFullYear()} Haffele. All rights reserved.</FooterSmall>
++          <FooterSmall>┬⌐ {new Date().getFullYear()} KAFF. All rights reserved.</FooterSmall>
+           <FooterSmall>Gas Safe Registered ┬╖ Fully Insured</FooterSmall>
+         </FooterBottom>
+       </FooterWrap>

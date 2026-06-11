@@ -44,6 +44,12 @@ const scaleIn = keyframes({
   to: { opacity: 1, transform: "scale(1)" },
 });
 
+const pulse = keyframes({
+  "0%": { transform: "scale(1)", boxShadow: "0 0 0 0 rgba(249, 115, 22, 0.7)" },
+  "70%": { transform: "scale(1.05)", boxShadow: "0 0 0 15px rgba(249, 115, 22, 0)" },
+  "100%": { transform: "scale(1)", boxShadow: "0 0 0 0 rgba(249, 115, 22, 0)" },
+});
+
 // ── Scroll-reveal hook ────────────────────────────────────────────────
 
 function useInView(threshold = 0.15) {
@@ -78,47 +84,78 @@ const SiteWrapper = styled("div", {
 
 // ── Navbar ────────────────────────────────────────────────────────────
 
-const NavBar = styled("header", {
-  position: "fixed",
+const HeaderWrap = styled("div", {
+  position: "sticky",
   top: 0,
-  left: 0,
-  right: 0,
   zIndex: "$shell",
+});
+
+const marqueeScroll = keyframes({
+  "0%": { transform: "translateX(0)" },
+  "100%": { transform: "translateX(-50%)" },
+});
+
+const TopBar = styled("div", {
+  backgroundColor: "#000000",
+  color: "#ffffff",
+  fontFamily: "$meta",
+  fontSize: "$087",
+  padding: "$050 0",
+  overflow: "hidden",
+  whiteSpace: "nowrap",
+  display: "flex",
+  alignItems: "center",
+  width: "100%",
+});
+
+const MarqueeTrack = styled("div", {
+  display: "flex",
+  width: "max-content",
+  animation: `${marqueeScroll} 40s linear infinite`,
+  willChange: "transform",
+  "&:hover": {
+    animationPlayState: "paused",
+  }
+});
+
+const MarqueeText = styled("span", {
+  display: "inline-block",
+  paddingRight: "50px",
+  whiteSpace: "nowrap",
+});
+
+const NavBar = styled("header", {
+  position: "relative",
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
-  px: "$200",
-  height: "64px",
-  backdropFilter: "blur(12px)",
-  WebkitBackdropFilter: "blur(12px)",
-  transition: "background 0.3s ease, box-shadow 0.3s ease",
-  "@sm": { px: "$100" },
+  px: "$100",
+  height: "56px",
+  backgroundColor: "#ffffff",
+  transition: "box-shadow 0.3s ease",
+  "@sm": { px: "$050", height: "48px" },
   variants: {
     scrolled: {
       true: {
-        backgroundColor: "rgba(255,255,255,0.93)",
         boxShadow: "$300",
       },
       false: {
-        backgroundColor: "transparent",
+        boxShadow: "none",
       },
     },
   },
 });
 
 const LogoText = styled("a", {
-  fontFamily: "$headline",
-  fontWeight: "$bold",
-  fontSize: "$175",
+  display: "flex",
+  alignItems: "center",
   textDecoration: "none",
-  letterSpacing: "-0.02em",
-  transition: "color 0.3s ease",
-  variants: {
-    light: {
-      true: { color: "#ffffff" },
-      false: { color: "$primary" },
-    },
-  },
+});
+
+const LogoImg = styled("img", {
+  height: "56px",
+  objectFit: "contain",
+  "@sm": { height: "44px" },
 });
 
 const DesktopNav = styled("nav", {
@@ -137,25 +174,38 @@ const NavLink = styled("a", {
   letterSpacing: "0.04em",
   textTransform: "uppercase",
   transition: "color 0.2s ease",
+  color: "#000000",
   "&:hover": { color: "$cta" },
-  variants: {
-    light: {
-      true: { color: "rgba(255,255,255,0.85)", "&:hover": { color: "#ffffff" } },
-      false: { color: "$primary" },
-    },
-  },
+});
+
+const IconGroup = styled("div", {
+  display: "flex",
+  alignItems: "center",
+  gap: "$075",
+});
+
+const IconButton = styled("button", {
+  background: "none",
+  border: "none",
+  cursor: "pointer",
+  padding: "$025",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  color: "#000000",
+  transition: "color 0.2s ease",
+  "&:hover": { color: "$cta" },
 });
 
 const HamburgerBtn = styled("button", {
-  display: "none",
+  display: "flex",
   background: "none",
   border: "none",
   cursor: "pointer",
   padding: "$050",
   alignItems: "center",
   justifyContent: "center",
-  "@sm": { display: "flex" },
-  "@md": { display: "flex" },
+  color: "#000000",
 });
 
 const MobileOverlay = styled("div", {
@@ -191,45 +241,58 @@ const MobileLink = styled("a", {
 
 const HeroSection = styled("section", {
   position: "relative",
-  minHeight: "100vh",
+  minHeight: "60vh",
   display: "flex",
   alignItems: "center",
-  justifyContent: "center",
+  justifyContent: "flex-start",
   overflow: "hidden",
+  "@sm": { minHeight: "50vh" },
 });
 
-const HeroBg = styled("div", {
+const HeroBgWrapper = styled("div", {
   position: "absolute",
   inset: 0,
-  backgroundImage: "url(/hero-chimney.webp)",
+});
+
+const HeroBgImage = styled("div", {
+  position: "absolute",
+  inset: 0,
   backgroundSize: "cover",
-  backgroundPosition: "center",
+  backgroundPosition: "right center",
+  transition: "opacity 1s ease-in-out",
   "&::after": {
     content: '""',
     position: "absolute",
     inset: 0,
-    background:
-      "linear-gradient(135deg, rgba(8,12,22,0.85) 0%, rgba(8,12,22,0.58) 60%, rgba(8,12,22,0.38) 100%)",
+    background: "linear-gradient(to right, rgba(255,255,255,1) 0%, rgba(255,255,255,0.9) 35%, rgba(255,255,255,0) 80%)",
   },
+  "@sm": {
+    backgroundPosition: "70% center",
+    "&::after": {
+      background: "linear-gradient(to right, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 60%, rgba(255,255,255,0.4) 100%)",
+    }
+  }
 });
 
 const HeroContent = styled("div", {
   position: "relative",
   zIndex: 1,
-  maxWidth: "780px",
-  px: "$200",
-  textAlign: "center",
-  "@sm": { px: "$100" },
+  maxWidth: "700px",
+  paddingLeft: "10%",
+  paddingRight: "$200",
+  textAlign: "left",
+  "@sm": { px: "$100", paddingLeft: "$100" },
 });
 
-const Eyebrow = styled("p", {
+const Eyebrow = styled("div", {
   fontFamily: "$meta",
   fontWeight: "$bold",
-  fontSize: "$075",
-  letterSpacing: "0.18em",
-  textTransform: "uppercase",
-  color: "#f97316",
-  marginBottom: "$100",
+  fontSize: "$100",
+  backgroundColor: "#333333",
+  color: "#ffffff",
+  display: "inline-block",
+  padding: "$050 $100",
+  marginBottom: "$150",
   animation: `${fadeIn} 0.8s ease 0.2s both`,
 });
 
@@ -237,12 +300,17 @@ const HeroH1 = styled("h1", {
   fontFamily: "$headline",
   fontWeight: "$bold",
   fontSize: "$400",
-  lineHeight: "$headline",
-  color: "#ffffff",
+  lineHeight: "1.2",
+  color: "#333333",
   marginBottom: "$100",
   animation: `${fadeUp} 0.9s ease 0.3s both`,
-  "@sm": { fontSize: "$250" },
+  "@sm": { fontSize: "$225", lineHeight: "1.1" },
   "@md": { fontSize: "$300" },
+});
+
+const AccentSpan = styled("span", {
+  color: "#f97316",
+  display: "block",
 });
 
 const HeroSub = styled("p", {
@@ -250,42 +318,40 @@ const HeroSub = styled("p", {
   fontWeight: "$regular",
   fontSize: "$125",
   lineHeight: "$body",
-  color: "rgba(255,255,255,0.82)",
+  color: "#555555",
   marginBottom: "$200",
   animation: `${fadeUp} 0.9s ease 0.5s both`,
   "@sm": { fontSize: "$100" },
 });
 
-const HeroCtas = styled("div", {
-  display: "flex",
-  gap: "$100",
-  justifyContent: "center",
-  flexWrap: "wrap",
-  animation: `${fadeUp} 0.9s ease 0.7s both`,
-});
-
-const FlameSpan = styled("span", {
-  display: "inline-block",
-  animation: `${flicker} 2.8s ease-in-out infinite`,
-});
-
-const ScrollIndicator = styled("div", {
+const SliderDots = styled("div", {
   position: "absolute",
   bottom: "$150",
-  left: "50%",
-  transform: "translateX(-50%)",
-  zIndex: 1,
-  animation: `${fadeIn} 1s ease 1.5s both`,
+  left: "0",
+  right: "0",
   display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: "$050",
+  justifyContent: "center",
+  gap: "10px",
+  zIndex: 2,
+  animation: `${fadeIn} 1s ease 1.5s both`,
 });
 
-const ScrollLine = styled("div", {
-  width: "1px",
-  height: "48px",
-  background: "linear-gradient(to bottom, rgba(255,255,255,0.6), transparent)",
+const Dot = styled("div", {
+  width: "12px",
+  height: "12px",
+  borderRadius: "50%",
+  backgroundColor: "rgba(200,200,200,0.6)",
+  cursor: "pointer",
+  transition: "all 0.3s ease",
+  "&:hover": { backgroundColor: "rgba(200,200,200,0.9)" },
+  variants: {
+    active: {
+      true: {
+        backgroundColor: "#ffffff",
+        boxShadow: "0 0 0 2px #f97316",
+      }
+    }
+  }
 });
 
 // ── Trust Bar ─────────────────────────────────────────────────────────
@@ -307,7 +373,7 @@ const TrustItem = styled("div", {
   gap: "$075",
   color: "rgba(255,255,255,0.75)",
   fontFamily: "$meta",
-  fontSize: "$087",
+  fontSize: "$075",
   fontWeight: "$bold",
   letterSpacing: "0.05em",
   textTransform: "uppercase",
@@ -321,6 +387,251 @@ const Pip = styled("span", {
   backgroundColor: "#f97316",
   flexShrink: 0,
 });
+
+// ── Booking Form ────────────────────────────────────────────────────────
+
+const BookingSection = styled("section", {
+  backgroundColor: "$surface",
+  py: "$400",
+  px: "$200",
+  display: "flex",
+  justifyContent: "center",
+  "@sm": { px: "$100" },
+});
+
+const BookingFormWrap = styled("div", {
+  width: "100%",
+  maxWidth: "600px",
+  backgroundColor: "#ffffff",
+  borderRadius: "$150",
+  padding: "$400",
+  boxShadow: "$400",
+  border: "1px solid $outline",
+  transition: "box-shadow 0.3s ease",
+  "&:hover": {
+    boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
+  }
+});
+
+const FormGroup = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  gap: "$050",
+  marginBottom: "$150",
+});
+
+const FormLabel = styled("label", {
+  fontFamily: "$meta",
+  fontSize: "$087",
+  fontWeight: "$bold",
+  color: "$primary",
+});
+
+const FormInput = styled("input", {
+  fontFamily: "$body",
+  fontSize: "$100",
+  padding: "$100",
+  borderRadius: "$050",
+  border: "1px solid #e2e8f0",
+  backgroundColor: "#f8fafc",
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+  outline: "none",
+  "&:hover": {
+    borderColor: "#cbd5e1",
+  },
+  "&:focus": {
+    borderColor: "$cta",
+    backgroundColor: "#ffffff",
+    boxShadow: "0 0 0 3px rgba(249, 115, 22, 0.15)",
+  },
+});
+
+const FormTextarea = styled("textarea", {
+  fontFamily: "$body",
+  fontSize: "$100",
+  padding: "$100",
+  borderRadius: "$050",
+  border: "1px solid #e2e8f0",
+  backgroundColor: "#f8fafc",
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+  outline: "none",
+  resize: "vertical",
+  minHeight: "100px",
+  "&:hover": {
+    borderColor: "#cbd5e1",
+  },
+  "&:focus": {
+    borderColor: "$cta",
+    backgroundColor: "#ffffff",
+    boxShadow: "0 0 0 3px rgba(249, 115, 22, 0.15)",
+  },
+});
+
+const PopupOverlay = styled("div", {
+  position: "fixed",
+  inset: 0,
+  backgroundColor: "rgba(0,0,0,0.6)",
+  backdropFilter: "blur(6px)",
+  zIndex: 9999,
+  display: "flex",
+  alignItems: "center",
+});
+
+const SuccessText = styled("h3", {
+  fontFamily: "$meta",
+  fontSize: "$150",
+  fontWeight: "$bold",
+  color: "$onBackground",
+  marginBottom: "$050",
+});
+
+const SuccessWrap = styled("div", {
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: "$400 $200",
+  textAlign: "center",
+  animation: `${scaleIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1)`,
+  width: "100%",
+  height: "100%",
+});
+
+const SuccessIconWrap = styled("div", {
+  width: "80px",
+  height: "80px",
+  borderRadius: "50%",
+  backgroundColor: "#dcfce7",
+  color: "#16a34a",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  marginBottom: "$200",
+});
+
+const SuccessSub = styled("p", {
+  fontFamily: "$body",
+  fontSize: "$100",
+  color: "$onBackground-subtle",
+});
+
+const PopupContent = styled("div", {
+  position: "relative",
+  width: "90%",
+  maxWidth: "500px",
+  maxHeight: "90vh",
+  overflowY: "auto",
+  backgroundColor: "#ffffff",
+  borderRadius: "$150",
+  padding: "$400",
+  boxShadow: "$400",
+  animation: `${scaleIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1)`,
+  "@sm": {
+    padding: "$300 $150",
+  }
+});
+
+const FloatingCallButton = styled("a", {
+  position: "fixed",
+  bottom: "$200",
+  right: "$200",
+  zIndex: 50,
+  width: "60px",
+  height: "60px",
+  borderRadius: "50%",
+  backgroundColor: "$cta",
+  color: "#ffffff",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  boxShadow: "0 10px 25px rgba(249, 115, 22, 0.4)",
+  animation: `${pulse} 2.5s infinite ease-in-out`,
+  transition: "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s",
+  "&:hover": {
+    transform: "translateY(-4px) scale(1.05)",
+    backgroundColor: "$ctaHover",
+  },
+  "@sm": {
+    width: "50px",
+    height: "50px",
+    bottom: "$150",
+    right: "$150",
+  }
+});
+
+const ClosePopupButton = styled("button", {
+  position: "absolute",
+  top: "$150",
+  right: "$150",
+  zIndex: 10,
+  background: "#f1f5f9",
+  borderRadius: "50%",
+  width: "40px",
+  height: "40px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  border: "none",
+  cursor: "pointer",
+  color: "$onBackground",
+  "&:hover": { backgroundColor: "#e2e8f0", color: "$primary" },
+  "@sm": {
+    top: "$100",
+    right: "$100",
+    width: "36px",
+    height: "36px",
+  }
+});
+
+function BookingFormContent() {
+  const [submitted, setSubmitted] = useState(false);
+
+  if (submitted) {
+    return (
+      <SuccessWrap>
+        <ClosePopupButton 
+          type="button" 
+          onClick={() => setSubmitted(false)}
+          css={{ top: "$050", right: "$050", "@sm": { top: "$050", right: "$050" } }}
+          title="Go Back"
+          aria-label="Back to form"
+        >
+          <Icon size="150" label="Back"><Close /></Icon>
+        </ClosePopupButton>
+        <SuccessIconWrap>
+          <Icon size="200" label="Success"><Check /></Icon>
+        </SuccessIconWrap>
+        <SuccessText>Booking Confirmed!</SuccessText>
+        <SuccessSub>Your complaint is booked. Our team will contact you shortly.</SuccessSub>
+      </SuccessWrap>
+    );
+  }
+
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}>
+      <FormGroup>
+        <FormLabel htmlFor="name">Name</FormLabel>
+        <FormInput id="name" type="text" placeholder="Your Name" required />
+      </FormGroup>
+      <FormGroup>
+        <FormLabel htmlFor="phone">Mobile No.</FormLabel>
+        <FormInput id="phone" type="tel" placeholder="Your Mobile No." required />
+      </FormGroup>
+      <FormGroup>
+        <FormLabel htmlFor="address">Address</FormLabel>
+        <FormInput id="address" type="text" placeholder="Your Address" required />
+      </FormGroup>
+      <FormGroup>
+        <FormLabel htmlFor="issue">Issue you are facing</FormLabel>
+        <FormTextarea id="issue" placeholder="Describe the issue..." required />
+      </FormGroup>
+      <Button variant="cta" style={{ width: "100%", marginTop: "1rem" }}>
+        Confirm Booking
+      </Button>
+    </form>
+  );
+}
 
 // ── Section shell ─────────────────────────────────────────────────────
 
@@ -863,9 +1174,9 @@ const steps = [
 ];
 
 const testimonials = [
-  { text: "Booked Haffele for a chimney sweep and couldn't be happier. Arrived on time, covered everything with dust sheets, left immaculate. Highly recommend.", author: "James T., Homeowner" },
+  { text: "Booked KAFF for a chimney sweep and couldn't be happier. Arrived on time, covered everything with dust sheets, left immaculate. Highly recommend.", author: "James T., Homeowner" },
   { text: "Had my gas hob repaired in under two hours. The engineer was professional, explained everything clearly, and the price was exactly as quoted. Brilliant.", author: "Sarah M., Customer" },
-  { text: "Used Haffele for an annual chimney service two years running. Consistent quality and great peace of mind knowing it's done properly.", author: "Robert H., Customer" },
+  { text: "Used KAFF for an annual chimney service two years running. Consistent quality and great peace of mind knowing it's done properly.", author: "Robert H., Customer" },
 ];
 
 const faqs = [
@@ -878,9 +1189,31 @@ const faqs = [
 
 // ── App ───────────────────────────────────────────────────────────────
 
+const heroImages = [
+  "/hero-oven.png",
+  "/cozy-kitchen-interior-design.jpg",
+  "/gas-hob-service.webp"
+];
+
 export default function App() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    const popupTimer = setTimeout(() => {
+      setShowPopup(true);
+    }, 2000);
+    return () => clearTimeout(popupTimer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -903,34 +1236,56 @@ export default function App() {
 
   return (
     <SiteWrapper>
-      {/* ─ Navbar ─ */}
-      <NavBar scrolled={scrolled ? "true" : "false"}>
-        <LogoText href="#" light={!scrolled ? "true" : "false"}>
-          Haffele
-        </LogoText>
-        <DesktopNav>
-          {navItems.map((n) => (
-            <NavLink
-              key={n.id}
-              href={`#${n.id}`}
-              light={!scrolled ? "true" : "false"}
-              onClick={(e: React.MouseEvent) => { e.preventDefault(); goto(n.id); }}
-            >
-              {n.label}
-            </NavLink>
-          ))}
-        </DesktopNav>
-        <DesktopNav>
-          <Button variant="cta" density="compact" onClick={() => goto("contact")}>
-            Book Now
-          </Button>
-        </DesktopNav>
-        <HamburgerBtn onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle navigation">
-          <Icon size="150" label={menuOpen ? "Close" : "Menu"}>
-            {menuOpen ? <Close /> : <Menu />}
-          </Icon>
-        </HamburgerBtn>
-      </NavBar>
+      <HeaderWrap>
+        {/* ─ Top Announcement Bar ─ */}
+        <TopBar>
+          <MarqueeTrack>
+            <MarqueeText>
+              Please beware of fraudulent persons asking for advance UPI or other online payments on behalf of KAFF. We do not request any advance payments online to attend complaints, installations, demos, or site visits. KAFF will not be responsible for any loss due to such fraudulent activities. For genuine support, kindly contact only on KAFF official Customer Care Number.
+            </MarqueeText>
+            <MarqueeText>
+              Please beware of fraudulent persons asking for advance UPI or other online payments on behalf of KAFF. We do not request any advance payments online to attend complaints, installations, demos, or site visits. KAFF will not be responsible for any loss due to such fraudulent activities. For genuine support, kindly contact only on KAFF official Customer Care Number.
+            </MarqueeText>
+          </MarqueeTrack>
+        </TopBar>
+
+        {/* ─ Navbar ─ */}
+        <NavBar scrolled={scrolled ? "true" : "false"}>
+          <LogoText href="#">
+            <LogoImg src="/logo-removebg-preview.png" alt="KAFF Logo" />
+          </LogoText>
+          <DesktopNav>
+            {navItems.map((n) => (
+              <NavLink
+                key={n.id}
+                href={`#${n.id}`}
+                onClick={(e: React.MouseEvent) => { e.preventDefault(); goto(n.id); }}
+              >
+                {n.label}
+              </NavLink>
+            ))}
+          </DesktopNav>
+          <IconGroup>
+            <IconButton aria-label="Location">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </IconButton>
+            <IconButton aria-label="Search">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </IconButton>
+            <IconButton aria-label="Profile">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </IconButton>
+            <IconButton aria-label="Cart">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            </IconButton>
+            <HamburgerBtn onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle navigation">
+              <Icon size="150" label={menuOpen ? "Close" : "Menu"}>
+                {menuOpen ? <Close /> : <Menu />}
+              </Icon>
+            </HamburgerBtn>
+          </IconGroup>
+        </NavBar>
+      </HeaderWrap>
 
       {/* ─ Mobile menu ─ */}
       <MobileOverlay open={menuOpen ? "true" : undefined} aria-hidden={!menuOpen}>
@@ -945,46 +1300,27 @@ export default function App() {
       </MobileOverlay>
 
       {/* ─ Hero ─ */}
-      <HeroSection id="home" aria-label="Welcome to Haffele">
-        <HeroBg aria-hidden />
+      <HeroSection id="home" aria-label="Welcome to KAFF">
+        <HeroBgWrapper aria-hidden>
+          {heroImages.map((src, i) => (
+            <HeroBgImage key={src} style={{ backgroundImage: `url(${src})`, opacity: i === currentSlide ? 1 : 0 }} />
+          ))}
+        </HeroBgWrapper>
         <HeroContent>
-          <Eyebrow>Chimney &amp; Gas Hob Specialists</Eyebrow>
+          <Eyebrow>Built-In Microwave &amp; Oven</Eyebrow>
           <HeroH1>
-            Expert Care for <FlameSpan>Every</FlameSpan> Flame in Your Home
+            From baking to roasting,
+            <AccentSpan>all made easy.</AccentSpan>
           </HeroH1>
           <HeroSub>
-            Professional chimney sweeping, repair, and gas hob servicing by Gas Safe registered engineers. Safe, reliable, and always on time.
+            4 Cooking modes in one!
           </HeroSub>
-          <HeroCtas>
-            <Button
-              variant="cta"
-              css={{ px: "$200", py: "$100", fontFamily: "$meta", fontWeight: "$bold", fontSize: "$100" }}
-              onClick={() => goto("contact")}
-            >
-              Book a Service
-            </Button>
-            <Button
-              variant="secondary"
-              isOutline
-              css={{
-                px: "$200",
-                py: "$100",
-                fontFamily: "$meta",
-                fontWeight: "$bold",
-                fontSize: "$100",
-                borderColor: "rgba(255,255,255,0.55)",
-                color: "#ffffff",
-                "&:hover": { backgroundColor: "rgba(255,255,255,0.1)", borderColor: "#ffffff" },
-              }}
-              onClick={() => goto("services")}
-            >
-              Our Services
-            </Button>
-          </HeroCtas>
         </HeroContent>
-        <ScrollIndicator aria-hidden>
-          <ScrollLine />
-        </ScrollIndicator>
+        <SliderDots>
+          {heroImages.map((_, i) => (
+            <Dot key={i} active={i === currentSlide ? "true" : undefined} onClick={() => setCurrentSlide(i)} />
+          ))}
+        </SliderDots>
       </HeroSection>
 
       {/* ─ Trust bar ─ */}
@@ -998,6 +1334,14 @@ export default function App() {
           )
         )}
       </TrustBar>
+
+      {/* ─ Booking Form ─ */}
+      <BookingSection>
+        <BookingFormWrap>
+          <SectionH2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Book a Service</SectionH2>
+          <BookingFormContent />
+        </BookingFormWrap>
+      </BookingSection>
 
       {/* ─ Services ─ */}
       <section id="services" aria-labelledby="services-h2">
@@ -1038,11 +1382,11 @@ export default function App() {
       <DarkBand id="why-us" aria-labelledby="why-h2">
         <WhyGrid>
           <Animate anim="slideRight">
-            <WhyPhoto role="img" aria-label="Haffele professional engineers" />
+            <WhyPhoto role="img" aria-label="KAFF professional engineers" />
           </Animate>
           <WhyItems>
             <Animate anim="slideLeft">
-              <SectionLabel>Why Haffele</SectionLabel>
+              <SectionLabel>Why KAFF</SectionLabel>
               <SectionH2 id="why-h2" css={{ color: "#ffffff" }}>
                 The Trusted Choice for Home Safety
               </SectionH2>
@@ -1187,7 +1531,7 @@ export default function App() {
       <FooterWrap>
         <FooterGrid>
           <div>
-            <FooterLogo>Haffele</FooterLogo>
+            <FooterLogo>KAFF</FooterLogo>
             <FooterBlurb>
               Professional chimney and gas hob service and repair. Gas Safe registered engineers you can trust.
             </FooterBlurb>
@@ -1204,16 +1548,35 @@ export default function App() {
             <FooterColHead>Contact</FooterColHead>
             <FooterList>
               <li><FooterA href="tel:+441234567890">0800 000 0000</FooterA></li>
-              <li><FooterA href="mailto:hello@haffele.co.uk">hello@haffele.co.uk</FooterA></li>
+              <li><FooterA href="mailto:hello@KAFF.co.uk">hello@KAFF.co.uk</FooterA></li>
               <li><FooterA href="#">Mon – Sat, 7am – 7pm</FooterA></li>
             </FooterList>
           </div>
         </FooterGrid>
         <FooterBottom>
-          <FooterSmall>© {new Date().getFullYear()} Haffele. All rights reserved.</FooterSmall>
-          <FooterSmall>Gas Safe Registered · Fully Insured</FooterSmall>
+          <FooterSmall>© 2026 KAFF Services. All rights reserved.</FooterSmall>
         </FooterBottom>
       </FooterWrap>
+
+      {/* ─ Floating Call Button ─ */}
+      <FloatingCallButton href="tel:+441234567890" aria-label="Call Us Now">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+      </FloatingCallButton>
+
+      {/* ─ Popup Overlay ─ */}
+      {showPopup && (
+        <PopupOverlay onClick={() => setShowPopup(false)}>
+          <PopupContent onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+            <ClosePopupButton onClick={() => setShowPopup(false)}>
+              <Icon size="150" label="Close Popup"><Close /></Icon>
+            </ClosePopupButton>
+            <SectionH2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Book a Service</SectionH2>
+            <BookingFormContent />
+          </PopupContent>
+        </PopupOverlay>
+      )}
     </SiteWrapper>
   );
 }
