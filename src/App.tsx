@@ -229,12 +229,12 @@ const MobileOverlay = styled("div", {
 
 const MobileLink = styled("a", {
   fontFamily: "$headline",
-  fontSize: "$250",
+  fontSize: "$150",
   fontWeight: "$bold",
   color: "$primary",
   textDecoration: "none",
   "&:hover": { color: "$cta" },
-  "@sm": { fontSize: "$200" },
+  "@sm": { fontSize: "$125" },
 });
 
 // ── Hero ──────────────────────────────────────────────────────────────
@@ -1293,6 +1293,9 @@ export default function App() {
 
       {/* ─ Mobile menu ─ */}
       <MobileOverlay open={menuOpen ? "true" : undefined} aria-hidden={!menuOpen}>
+        <ClosePopupButton onClick={() => setMenuOpen(false)} aria-label="Close menu">
+          <Icon size="150" label="Close Menu"><Close /></Icon>
+        </ClosePopupButton>
         {navItems.map((n) => (
           <MobileLink key={n.id} href={`#${n.id}`} onClick={(e: React.MouseEvent) => { e.preventDefault(); goto(n.id); }}>
             {n.label}
