@@ -536,9 +536,9 @@ const PopupContent = styled("div", {
 
 const FloatingCallButton = styled("a", {
   position: "fixed",
-  bottom: "$200",
-  right: "$200",
-  zIndex: 50,
+  bottom: "24px",
+  right: "24px",
+  zIndex: 9999,
   width: "60px",
   height: "60px",
   borderRadius: "50%",
@@ -557,8 +557,8 @@ const FloatingCallButton = styled("a", {
   "@sm": {
     width: "50px",
     height: "50px",
-    bottom: "$150",
-    right: "$150",
+    bottom: "20px",
+    right: "20px",
   }
 });
 
@@ -1005,7 +1005,7 @@ const FooterGrid = styled("div", {
   maxWidth: "1200px",
   mx: "auto",
   display: "grid",
-  gridTemplateColumns: "2fr 1fr 1fr",
+  gridTemplateColumns: "1.5fr 1fr 1fr 1.5fr",
   gap: "$300",
   "@sm": { gridTemplateColumns: "1fr", gap: "$200" },
   "@md": { gridTemplateColumns: "1fr 1fr", gap: "$200" },
@@ -1122,32 +1122,39 @@ function Animate({
 
 const services = [
   {
+    tag: "Hob",
+    title: "Hob Repair and services",
+    desc: "Fast, reliable hob repairs by certified engineers. No ignition, uneven flames, or gas smell? We diagnose and fix it right.",
+    image: "/hob-repair.webp",
+    features: ["Same-day diagnosis", "Expert technicians", "All brands covered", "Parts supplied & fitted"],
+  },
+  {
+    tag: "Gas Stove",
+    title: "Gas stove repair and service",
+    desc: "Comprehensive gas stove servicing including burner cleaning, ignition testing, and safety checks to keep your cooker performing like new.",
+    image: "/gas-hob-service.webp",
+    features: ["Full burner clean", "Gas pressure check", "Ignition system test", "Safety check"],
+  },
+  {
     tag: "Chimney",
-    title: "Chimney Service & Sweep",
-    desc: "Professional chimney sweeping and annual servicing to keep your flue clear, safe, and efficient. We remove soot, debris, and blockages with minimal mess.",
+    title: "Chimney repair and service",
+    desc: "Professional chimney repairing and servicing to keep your kitchen clear, safe, and efficient. We handle motors, filters, and blockages.",
     image: "/chimeny.webp",
-    features: ["Annual sweep & inspection", "Certificate of service", "Flue condition report", "Bird guard fitting"],
+    features: ["Motor repair", "Filter replacement", "Suction check", "Deep cleaning"],
   },
   {
-    tag: "Chimney",
-    title: "Chimney Repair & Repointing",
-    desc: "From cracked flaunching to crumbling mortar joints, our skilled masons restore your chimney stack to full structural integrity.",
-    image: "/chimney.jpg",
-    features: ["Repointing & flaunching", "Pot replacement", "Flashing repair", "Cowl installation"],
+    tag: "Cooking Range",
+    title: "Cooking range repair and services",
+    desc: "Complete repair and maintenance for freestanding and built-in cooking ranges. We ensure your burners and ovens are perfectly calibrated.",
+    image: "/cozy-kitchen-interior-design.webp",
+    features: ["Burner tuning", "Oven calibration", "Safety check", "Door seal inspection"],
   },
   {
-    tag: "Gas Hob",
-    title: "Gas Hob Service",
-    desc: "Comprehensive gas hob servicing including burner cleaning, ignition testing, and safety checks to keep your cooker performing like new.",
-    image: "/hob-repair.webp",
-    features: ["Full burner clean", "Gas pressure check", "Ignition system test", "Safety certificate"],
-  },
-  {
-    tag: "Gas Hob",
-    title: "Gas Hob Repair",
-    desc: "Fast, reliable gas hob repairs by Gas Safe registered engineers. No ignition, uneven flames, or gas smell? We diagnose and fix it right.",
-    image: "/hob-repair.webp",
-    features: ["Same-day diagnosis", "Gas Safe registered", "All brands covered", "Parts supplied & fitted"],
+    tag: "Microwave",
+    title: "Microwave oven repair and service",
+    desc: "Expert repair and servicing for built-in microwaves and ovens. We ensure your appliance heats evenly, operates safely, and performs at its best.",
+    image: "/hero-oven.webp",
+    features: ["Complete diagnostics", "Heating element checks", "Magnetron testing", "Safe, reliable repairs"],
   },
 ];
 
@@ -1193,10 +1200,28 @@ const faqs = [
 
 // ── App ───────────────────────────────────────────────────────────────
 
-const heroImages = [
-  "/hero-oven.png",
-  "/cozy-kitchen-interior-design.jpg",
-  "/gas-hob-service.webp"
+const heroSlides = [
+  {
+    image: "/cozy-kitchen-interior-design.webp",
+    eyebrow: "Expert Chimney Repair",
+    h1: "Keep your kitchen smoke-free,",
+    accent: "with our expert service.",
+    sub: "Fast and reliable chimney sweep & repair.",
+  },
+  {
+    image: "/gas-hob-service.webp",
+    eyebrow: "Professional Gas Hob Service",
+    h1: "Cooking made safe and easy,",
+    accent: "with perfectly tuned hobs.",
+    sub: "Complete servicing and reliable repair.",
+  },
+  {
+    image: "/hero-oven.webp",
+    eyebrow: "Complete Kitchen Care",
+    h1: "Expert microwave and oven repair,",
+    accent: "we fix it all.",
+    sub: "Guaranteed satisfaction every time.",
+  }
 ];
 
 export default function App() {
@@ -1214,7 +1239,7 @@ export default function App() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(timer);
   }, []);
@@ -1256,7 +1281,7 @@ export default function App() {
         {/* ─ Navbar ─ */}
         <NavBar scrolled={scrolled ? "true" : "false"}>
           <LogoText href="#">
-            <LogoImg src="/logo-removebg-preview.png" alt="KAFF Logo" />
+            <LogoImg src="/logo-removebg-preview.webp" alt="KAFF Logo" />
           </LogoText>
           <DesktopNav>
             {navItems.map((n) => (
@@ -1301,30 +1326,35 @@ export default function App() {
             {n.label}
           </MobileLink>
         ))}
-        <Button variant="cta" onClick={() => goto("contact")}>
-          Book Now
-        </Button>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem", marginTop: "1rem" }}>
+          <Button variant="cta" onClick={() => goto("booking")}>
+            Book Now
+          </Button>
+          <Button as="a" href="tel:+919217982869" variant="primary" css={{ backgroundColor: "#f97316", color: "white", textDecoration: "none" }}>
+            Call Now
+          </Button>
+        </div>
       </MobileOverlay>
 
       {/* ─ Hero ─ */}
       <HeroSection id="home" aria-label="Welcome to KAFF">
         <HeroBgWrapper aria-hidden>
-          {heroImages.map((src, i) => (
-            <HeroBgImage key={src} style={{ backgroundImage: `url(${src})`, opacity: i === currentSlide ? 1 : 0 }} />
+          {heroSlides.map((slide, i) => (
+            <HeroBgImage key={slide.image} style={{ backgroundImage: `url(${slide.image})`, opacity: i === currentSlide ? 1 : 0 }} />
           ))}
         </HeroBgWrapper>
-        <HeroContent>
-          <Eyebrow>Built-In Microwave &amp; Oven</Eyebrow>
+        <HeroContent key={currentSlide}>
+          <Eyebrow>{heroSlides[currentSlide].eyebrow}</Eyebrow>
           <HeroH1>
-            From baking to roasting,
-            <AccentSpan>all made easy.</AccentSpan>
+            {heroSlides[currentSlide].h1}
+            <AccentSpan>{heroSlides[currentSlide].accent}</AccentSpan>
           </HeroH1>
           <HeroSub>
-            4 Cooking modes in one!
+            {heroSlides[currentSlide].sub}
           </HeroSub>
         </HeroContent>
         <SliderDots>
-          {heroImages.map((_, i) => (
+          {heroSlides.map((_, i) => (
             <Dot key={i} active={i === currentSlide ? "true" : undefined} onClick={() => setCurrentSlide(i)} />
           ))}
         </SliderDots>
@@ -1332,7 +1362,7 @@ export default function App() {
 
       {/* ─ Trust bar ─ */}
       <TrustBar role="list" aria-label="Trust signals">
-        {["Gas Safe Registered", "25+ Years Experience", "Same-Day Available", "Fully Insured", "Free Quotes"].map(
+        {["Hob Repair and services", "Gas stove repair and service", "Chimney repair and service", "Cooking range repair and services", "Microwave oven repair and service"].map(
           (t) => (
             <TrustItem key={t} role="listitem">
               <Pip aria-hidden />
@@ -1343,7 +1373,7 @@ export default function App() {
       </TrustBar>
 
       {/* ─ Booking Form ─ */}
-      <BookingSection>
+      <BookingSection id="booking">
         <BookingFormWrap>
           <SectionH2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Book a Service</SectionH2>
           <BookingFormContent />
@@ -1499,6 +1529,8 @@ export default function App() {
           <CtaSub>Book your chimney sweep or gas hob service today. Free quotes, no obligation.</CtaSub>
           <CtaRow>
             <Button
+              as="a"
+              href="tel:+919217982869"
               variant="primary"
               css={{
                 backgroundColor: "#ffffff",
@@ -1508,6 +1540,7 @@ export default function App() {
                 fontSize: "$100",
                 px: "$200",
                 py: "$100",
+                textDecoration: "none",
                 "&:hover": { backgroundColor: "#f1f5f9" },
               }}
             >
@@ -1517,6 +1550,7 @@ export default function App() {
             <Button
               variant="primary"
               isOutline
+              onClick={() => goto("booking")}
               css={{
                 borderColor: "#ffffff",
                 color: "#ffffff",
@@ -1539,34 +1573,63 @@ export default function App() {
         <FooterGrid>
           <div>
             <FooterLogo>KAFF</FooterLogo>
+            <p style={{ fontFamily: "var(--wpds-fonts-headline)", fontSize: "1.2rem", color: "#ffffff", marginBottom: "0.5rem", lineHeight: "1.4" }}>Your trusted partner for expert kitchen appliance repair and maintenance.</p>
             <FooterBlurb>
-              Professional chimney and gas hob service and repair. Gas Safe registered engineers you can trust.
+              Certified technicians, genuine parts, and guaranteed satisfaction.
             </FooterBlurb>
           </div>
           <div>
-            <FooterColHead>Services</FooterColHead>
+            <FooterColHead>Our Services</FooterColHead>
             <FooterList>
-              {["Chimney Sweep", "Chimney Repair", "Gas Hob Service", "Gas Hob Repair"].map((s) => (
+              {["Hob Repair and services", "Gas stove repair and service", "Chimney repair and service", "Cooking range repair and services", "Microwave oven repair and service"].map((s) => (
                 <li key={s}><FooterA href="#">{s}</FooterA></li>
               ))}
             </FooterList>
           </div>
           <div>
-            <FooterColHead>Contact</FooterColHead>
+            <FooterColHead>Our Service Locations</FooterColHead>
             <FooterList>
-              <li><FooterA href="tel:+441234567890">0800 000 0000</FooterA></li>
-              <li><FooterA href="mailto:hello@KAFF.co.uk">hello@KAFF.co.uk</FooterA></li>
-              <li><FooterA href="#">Mon – Sat, 7am – 7pm</FooterA></li>
+              {["Delhi", "Noida", "Greater Noida", "Ghaziabad", "Gurugram (Gurgaon)", "Faridabad", "Hyderabad", "Bangalore"].map((s) => (
+                <li key={s}><FooterA href="#">{s}</FooterA></li>
+              ))}
+            </FooterList>
+          </div>
+          <div>
+            <FooterColHead>Contact Us</FooterColHead>
+            <FooterList>
+              <li><FooterA href="#">Pillar No 238, Hoshiyarpur, Hoshiarpur Village, Sector 51, Noida, Uttar Pradesh 201303</FooterA></li>
+              <li><FooterA href="tel:+919217982869">+91 92179 82869</FooterA></li>
+              <li><FooterA href="mailto:shinekitchensolutions@gmail.com">shinekitchensolutions@gmail.com</FooterA></li>
+              <li><FooterA href="#">Mon–Sat: 8:00 AM – 8:00 PM</FooterA></li>
+              <li><FooterA href="#">Sunday: 9:00 AM – 6:00 PM</FooterA></li>
             </FooterList>
           </div>
         </FooterGrid>
-        <FooterBottom>
-          <FooterSmall>© 2026 KAFF Services. All rights reserved.</FooterSmall>
+        
+        <div style={{ maxWidth: "1200px", margin: "0 auto", paddingTop: "2rem", display: "flex", gap: "1.5rem", flexWrap: "wrap", justifyContent: "center", borderTop: "1px solid rgba(255,255,255,0.1)", marginTop: "2rem" }}>
+           {[
+             { name: "Privacy Policy", link: "/privacy.html" },
+             { name: "Terms & Conditions", link: "/terms.html" },
+             { name: "Refund Policy", link: "/refund.html" },
+             { name: "Cancellation Policy", link: "/cancellation.html" },
+             { name: "Disclaimer", link: "/disclaimer.html" }
+           ].map((s) => (
+                <FooterA key={s.name} href={s.link}>{s.name}</FooterA>
+           ))}
+        </div>
+
+        <FooterBottom style={{ flexDirection: "column", alignItems: "center", textAlign: "center", gap: "1rem", marginTop: "1.5rem", paddingTop: "0", borderTop: "none" }}>
+          <FooterSmall style={{ lineHeight: "1.5", maxWidth: "800px" }}>
+            © Disclaimer: shinekitchensolutions.in.net is an independent appliance repair and service provider and is not affiliated with or authorized by any brand. But we repair and service all major brands of all home appliances and we are very expert in it, All trademarks, logos, and brand names belong to their respective owners and are used for identification purposes only. We provide out-of-warranty repair and support services.
+          </FooterSmall>
+          <FooterSmall style={{ color: "#f97316", fontWeight: "bold" }}>
+            Designed and Developer By Ravindra Singh - 8448420308
+          </FooterSmall>
         </FooterBottom>
       </FooterWrap>
 
       {/* ─ Floating Call Button ─ */}
-      <FloatingCallButton href="tel:+441234567890" aria-label="Call Us Now">
+      <FloatingCallButton href="tel:+919217982869" aria-label="Call Us Now">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
         </svg>
