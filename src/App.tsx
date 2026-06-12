@@ -404,7 +404,7 @@ const BookingFormWrap = styled("div", {
   maxWidth: "600px",
   backgroundColor: "#ffffff",
   borderRadius: "$150",
-  padding: "$400",
+  padding: "$200 $400 $400",
   boxShadow: "$400",
   border: "1px solid $outline",
   transition: "box-shadow 0.3s ease",
@@ -417,20 +417,20 @@ const FormGroup = styled("div", {
   display: "flex",
   flexDirection: "column",
   gap: "$050",
-  marginBottom: "$150",
+  marginBottom: "$075",
 });
 
 const FormLabel = styled("label", {
   fontFamily: "$meta",
-  fontSize: "$087",
+  fontSize: "$075",
   fontWeight: "$bold",
   color: "$primary",
 });
 
 const FormInput = styled("input", {
-  fontFamily: "$body",
-  fontSize: "$100",
-  padding: "$100",
+  fontFamily: "system-ui, -apple-system, sans-serif",
+  fontSize: "$087",
+  padding: "$075",
   borderRadius: "$050",
   border: "1px solid #e2e8f0",
   backgroundColor: "#f8fafc",
@@ -447,9 +447,9 @@ const FormInput = styled("input", {
 });
 
 const FormTextarea = styled("textarea", {
-  fontFamily: "$body",
-  fontSize: "$100",
-  padding: "$100",
+  fontFamily: "system-ui, -apple-system, sans-serif",
+  fontSize: "$087",
+  padding: "$075",
   borderRadius: "$050",
   border: "1px solid #e2e8f0",
   backgroundColor: "#f8fafc",
@@ -475,6 +475,8 @@ const PopupOverlay = styled("div", {
   zIndex: 9999,
   display: "flex",
   alignItems: "center",
+  justifyContent: "center",
+  animation: `${fadeIn} 0.3s ease`,
 });
 
 const SuccessText = styled("h3", {
@@ -524,11 +526,11 @@ const PopupContent = styled("div", {
   overflowY: "auto",
   backgroundColor: "#ffffff",
   borderRadius: "$150",
-  padding: "$400",
+  padding: "$200 $400 $400",
   boxShadow: "$400",
   animation: `${scaleIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1)`,
   "@sm": {
-    padding: "$300 $150",
+    padding: "$150 $150 $300",
   }
 });
 
@@ -584,21 +586,23 @@ const ClosePopupButton = styled("button", {
   }
 });
 
-function BookingFormContent() {
+function BookingFormContent({ onClose }: { onClose?: () => void }) {
   const [submitted, setSubmitted] = useState(false);
 
   if (submitted) {
     return (
       <SuccessWrap>
-        <ClosePopupButton 
-          type="button" 
-          onClick={() => setSubmitted(false)}
-          css={{ top: "$050", right: "$050", "@sm": { top: "$050", right: "$050" } }}
-          title="Go Back"
-          aria-label="Back to form"
-        >
-          <Icon size="150" label="Back"><Close /></Icon>
-        </ClosePopupButton>
+        {!onClose && (
+          <ClosePopupButton 
+            type="button" 
+            onClick={() => setSubmitted(false)}
+            css={{ top: "$050", right: "$050", "@sm": { top: "$050", right: "$050" } }}
+            title="Go Back"
+            aria-label="Back to form"
+          >
+            <Icon size="150" label="Back"><Close /></Icon>
+          </ClosePopupButton>
+        )}
         <SuccessIconWrap>
           <Icon size="200" label="Success"><Check /></Icon>
         </SuccessIconWrap>
@@ -1121,28 +1125,28 @@ const services = [
     tag: "Chimney",
     title: "Chimney Service & Sweep",
     desc: "Professional chimney sweeping and annual servicing to keep your flue clear, safe, and efficient. We remove soot, debris, and blockages with minimal mess.",
-    image: "/hero-chimney.webp",
+    image: "/chimeny.webp",
     features: ["Annual sweep & inspection", "Certificate of service", "Flue condition report", "Bird guard fitting"],
   },
   {
     tag: "Chimney",
     title: "Chimney Repair & Repointing",
     desc: "From cracked flaunching to crumbling mortar joints, our skilled masons restore your chimney stack to full structural integrity.",
-    image: "/chimney-repair.webp",
+    image: "/chimney.jpg",
     features: ["Repointing & flaunching", "Pot replacement", "Flashing repair", "Cowl installation"],
   },
   {
     tag: "Gas Hob",
     title: "Gas Hob Service",
     desc: "Comprehensive gas hob servicing including burner cleaning, ignition testing, and safety checks to keep your cooker performing like new.",
-    image: "/gas-hob-service.webp",
+    image: "/hob-repair.webp",
     features: ["Full burner clean", "Gas pressure check", "Ignition system test", "Safety certificate"],
   },
   {
     tag: "Gas Hob",
     title: "Gas Hob Repair",
     desc: "Fast, reliable gas hob repairs by Gas Safe registered engineers. No ignition, uneven flames, or gas smell? We diagnose and fix it right.",
-    image: "/gas-hob-service.webp",
+    image: "/hob-repair.webp",
     features: ["Same-day diagnosis", "Gas Safe registered", "All brands covered", "Parts supplied & fitted"],
   },
 ];
@@ -1573,7 +1577,7 @@ export default function App() {
               <Icon size="150" label="Close Popup"><Close /></Icon>
             </ClosePopupButton>
             <SectionH2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Book a Service</SectionH2>
-            <BookingFormContent />
+            <BookingFormContent onClose={() => setShowPopup(false)} />
           </PopupContent>
         </PopupOverlay>
       )}
