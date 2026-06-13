@@ -792,7 +792,7 @@ const WhyPhoto = styled("div", {
   borderRadius: "$075",
   overflow: "hidden",
   height: "500px",
-  backgroundImage: "url(/about-team.webp)",
+  backgroundImage: "url('/cozy-kitchen-interior-design.jpg')",
   backgroundSize: "cover",
   backgroundPosition: "center",
   position: "relative",
