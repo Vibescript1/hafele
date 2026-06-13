@@ -364,7 +364,12 @@ const TrustBar = styled("div", {
   justifyContent: "center",
   gap: "$300",
   flexWrap: "wrap",
-  "@sm": { gap: "$150", px: "$100" },
+  "@sm": { 
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "$075", 
+    px: "$100" 
+  },
 });
 
 const TrustItem = styled("div", {
@@ -377,6 +382,9 @@ const TrustItem = styled("div", {
   fontWeight: "$bold",
   letterSpacing: "0.05em",
   textTransform: "uppercase",
+  "@sm": {
+    fontSize: "10px",
+  }
 });
 
 const Pip = styled("span", {
@@ -1132,21 +1140,21 @@ const services = [
     tag: "Gas Stove",
     title: "Gas stove repair and service",
     desc: "Comprehensive gas stove servicing including burner cleaning, ignition testing, and safety checks to keep your cooker performing like new.",
-    image: "/gas-hob-service.webp",
+    image: "/gas stove.jpg",
     features: ["Full burner clean", "Gas pressure check", "Ignition system test", "Safety check"],
   },
   {
     tag: "Chimney",
     title: "Chimney repair and service",
     desc: "Professional chimney repairing and servicing to keep your kitchen clear, safe, and efficient. We handle motors, filters, and blockages.",
-    image: "/chimeny.webp",
+    image: "/chimeny.png",
     features: ["Motor repair", "Filter replacement", "Suction check", "Deep cleaning"],
   },
   {
     tag: "Cooking Range",
     title: "Cooking range repair and services",
     desc: "Complete repair and maintenance for freestanding and built-in cooking ranges. We ensure your burners and ovens are perfectly calibrated.",
-    image: "/cozy-kitchen-interior-design.webp",
+    image: "/cooking range.webp",
     features: ["Burner tuning", "Oven calibration", "Safety check", "Door seal inspection"],
   },
   {
@@ -1330,7 +1338,7 @@ export default function App() {
           <Button variant="cta" onClick={() => goto("booking")}>
             Book Now
           </Button>
-          <Button as="a" href="tel:+919217982869" variant="primary" css={{ backgroundColor: "#f97316", color: "white", textDecoration: "none" }}>
+          <Button as="a" href="tel:18001038620" variant="primary" css={{ backgroundColor: "#f97316", color: "white", textDecoration: "none" }}>
             Call Now
           </Button>
         </div>
@@ -1394,7 +1402,7 @@ export default function App() {
             {services.map((s, i) => (
               <Animate key={s.title} delay={i * 100}>
                 <ServiceCard>
-                  <SvcImg className="svc-img" style={{ backgroundImage: `url(${s.image})` }} role="img" aria-label={s.title} />
+                  <SvcImg className="svc-img" style={{ backgroundImage: `url('${s.image}')` }} role="img" aria-label={s.title} />
                   <SvcBody>
                     <SvcTag>{s.tag}</SvcTag>
                     <SvcH3>{s.title}</SvcH3>
@@ -1530,7 +1538,7 @@ export default function App() {
           <CtaRow>
             <Button
               as="a"
-              href="tel:+919217982869"
+              href="tel:18001038620"
               variant="primary"
               css={{
                 backgroundColor: "#ffffff",
@@ -1597,9 +1605,9 @@ export default function App() {
           <div>
             <FooterColHead>Contact Us</FooterColHead>
             <FooterList>
-              <li><FooterA href="#">Pillar No 238, Hoshiyarpur, Hoshiarpur Village, Sector 51, Noida, Uttar Pradesh 201303</FooterA></li>
-              <li><FooterA href="tel:+919217982869">+91 92179 82869</FooterA></li>
-              <li><FooterA href="mailto:shinekitchensolutions@gmail.com">shinekitchensolutions@gmail.com</FooterA></li>
+              <li><FooterA href="#">Prof NS Phadke Marg, Opp, Rajashree Sahu Marg, Vijay Nagar, shop no 118, Andheri East, Mumbai, Maharashtra 400069</FooterA></li>
+              <li><FooterA href="tel:18001038620">18001038620</FooterA></li>
+              <li><FooterA href="mailto:info@servicecenteres.co.in">info@servicecenteres.co.in</FooterA></li>
               <li><FooterA href="#">Mon–Sat: 8:00 AM – 8:00 PM</FooterA></li>
               <li><FooterA href="#">Sunday: 9:00 AM – 6:00 PM</FooterA></li>
             </FooterList>
@@ -1620,7 +1628,7 @@ export default function App() {
 
         <FooterBottom style={{ flexDirection: "column", alignItems: "center", textAlign: "center", gap: "1rem", marginTop: "1.5rem", paddingTop: "0", borderTop: "none" }}>
           <FooterSmall style={{ lineHeight: "1.5", maxWidth: "800px" }}>
-            © Disclaimer: shinekitchensolutions.in.net is an independent appliance repair and service provider and is not affiliated with or authorized by any brand. But we repair and service all major brands of all home appliances and we are very expert in it, All trademarks, logos, and brand names belong to their respective owners and are used for identification purposes only. We provide out-of-warranty repair and support services.
+            © Disclaimer: servicecenteres.co.in is an independent appliance repair and service provider and is not affiliated with or authorized by any brand. But we repair and service all major brands of all home appliances and we are very expert in it, All trademarks, logos, and brand names belong to their respective owners and are used for identification purposes only. We provide out-of-warranty repair and support services.
           </FooterSmall>
           <FooterSmall style={{ color: "#f97316", fontWeight: "bold" }}>
             Designed and Developer By Ravindra Singh - 8448420308
@@ -1629,7 +1637,7 @@ export default function App() {
       </FooterWrap>
 
       {/* ─ Floating Call Button ─ */}
-      <FloatingCallButton href="tel:+919217982869" aria-label="Call Us Now">
+      <FloatingCallButton href="tel:18001038620" aria-label="Call Us Now">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
         </svg>
