@@ -596,6 +596,43 @@ const ClosePopupButton = styled("button", {
 
 function BookingFormContent({ onClose }: { onClose?: () => void }) {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
+    // We also add a subject line for the email
+    const data = {
+      ...Object.fromEntries(formData.entries()),
+      _subject: "New Complaint Booking!"
+    };
+
+    try {
+      // Using FormSubmit.co which doesn't require API keys!
+      const response = await fetch("https://formsubmit.co/ajax/ravindrabanarasi89@gmail.com", {
+        method: "POST",
+        headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        alert("There was an error submitting the form. Please try again.");
+      }
+    } catch (error) {
+      alert("There was an error submitting the form. Please check your network and try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (submitted) {
     return (
@@ -621,25 +658,25 @@ function BookingFormContent({ onClose }: { onClose?: () => void }) {
   }
 
   return (
-    <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}>
+    <form onSubmit={handleSubmit}>
       <FormGroup>
         <FormLabel htmlFor="name">Name</FormLabel>
-        <FormInput id="name" type="text" placeholder="Your Name" required />
+        <FormInput name="name" id="name" type="text" placeholder="Your Name" required />
       </FormGroup>
       <FormGroup>
         <FormLabel htmlFor="phone">Mobile No.</FormLabel>
-        <FormInput id="phone" type="tel" placeholder="Your Mobile No." required />
+        <FormInput name="phone" id="phone" type="tel" placeholder="Your Mobile No." required />
       </FormGroup>
       <FormGroup>
         <FormLabel htmlFor="address">Address</FormLabel>
-        <FormInput id="address" type="text" placeholder="Your Address" required />
+        <FormInput name="address" id="address" type="text" placeholder="Your Address" required />
       </FormGroup>
       <FormGroup>
         <FormLabel htmlFor="issue">Issue you are facing</FormLabel>
-        <FormTextarea id="issue" placeholder="Describe the issue..." required />
+        <FormTextarea name="issue" id="issue" placeholder="Describe the issue..." required />
       </FormGroup>
-      <Button variant="cta" style={{ width: "100%", marginTop: "1rem" }}>
-        Confirm Booking
+      <Button variant="cta" style={{ width: "100%", marginTop: "1rem" }} disabled={loading}>
+        {loading ? "Submitting..." : "Confirm Booking"}
       </Button>
     </form>
   );
