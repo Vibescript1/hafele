@@ -1230,9 +1230,9 @@ const steps = [
 ];
 
 const testimonials = [
-  { text: "Booked KAFF for a chimney sweep and couldn't be happier. Arrived on time, covered everything with dust sheets, left immaculate. Highly recommend.", author: "James T., Homeowner" },
+  { text: `Booked ${window.SITE_CONFIG.name} for a chimney sweep and couldn't be happier. Arrived on time, covered everything with dust sheets, left immaculate. Highly recommend.`, author: "James T., Homeowner" },
   { text: "Had my gas hob repaired in under two hours. The engineer was professional, explained everything clearly, and the price was exactly as quoted. Brilliant.", author: "Sarah M., Customer" },
-  { text: "Used KAFF for an annual chimney service two years running. Consistent quality and great peace of mind knowing it's done properly.", author: "Robert H., Customer" },
+  { text: `Used ${window.SITE_CONFIG.name} for an annual chimney service two years running. Consistent quality and great peace of mind knowing it's done properly.`, author: "Robert H., Customer" },
 ];
 
 const faqs = [
@@ -1315,10 +1315,10 @@ export default function App() {
         <TopBar>
           <MarqueeTrack>
             <MarqueeText>
-              Please beware of fraudulent persons asking for advance UPI or other online payments on behalf of KAFF. We do not request any advance payments online to attend complaints, installations, demos, or site visits. KAFF will not be responsible for any loss due to such fraudulent activities. For genuine support, kindly contact only on KAFF official Customer Care Number.
+              Please beware of fraudulent persons asking for advance UPI or other online payments on behalf of {window.SITE_CONFIG.name}. We do not request any advance payments online to attend complaints, installations, demos, or site visits. {window.SITE_CONFIG.name} will not be responsible for any loss due to such fraudulent activities. For genuine support, kindly contact only on {window.SITE_CONFIG.name} official Customer Care Number.
             </MarqueeText>
             <MarqueeText>
-              Please beware of fraudulent persons asking for advance UPI or other online payments on behalf of KAFF. We do not request any advance payments online to attend complaints, installations, demos, or site visits. KAFF will not be responsible for any loss due to such fraudulent activities. For genuine support, kindly contact only on KAFF official Customer Care Number.
+              Please beware of fraudulent persons asking for advance UPI or other online payments on behalf of {window.SITE_CONFIG.name}. We do not request any advance payments online to attend complaints, installations, demos, or site visits. {window.SITE_CONFIG.name} will not be responsible for any loss due to such fraudulent activities. For genuine support, kindly contact only on {window.SITE_CONFIG.name} official Customer Care Number.
             </MarqueeText>
           </MarqueeTrack>
         </TopBar>
@@ -1326,7 +1326,7 @@ export default function App() {
         {/* ─ Navbar ─ */}
         <NavBar scrolled={scrolled ? "true" : "false"}>
           <LogoText href="#">
-            <LogoImg src="/logo-removebg-preview.webp" alt="KAFF Logo" />
+            <LogoImg src={window.SITE_CONFIG.logo} alt={`${window.SITE_CONFIG.name} Logo`} />
           </LogoText>
           <DesktopNav>
             {navItems.map((n) => (
@@ -1382,7 +1382,7 @@ export default function App() {
       </MobileOverlay>
 
       {/* ─ Hero ─ */}
-      <HeroSection id="home" aria-label="Welcome to KAFF">
+      <HeroSection id="home" aria-label={`Welcome to ${window.SITE_CONFIG.name}`}>
         <HeroBgWrapper aria-hidden>
           {heroSlides.map((slide, i) => (
             <HeroBgImage key={slide.image} style={{ backgroundImage: `url(${slide.image})`, opacity: i === currentSlide ? 1 : 0 }} />
@@ -1464,11 +1464,11 @@ export default function App() {
       <DarkBand id="why-us" aria-labelledby="why-h2">
         <WhyGrid>
           <Animate anim="slideRight">
-            <WhyPhoto role="img" aria-label="KAFF professional engineers" />
+            <WhyPhoto role="img" aria-label={`${window.SITE_CONFIG.name} professional engineers`} />
           </Animate>
           <WhyItems>
             <Animate anim="slideLeft">
-              <SectionLabel>Why KAFF</SectionLabel>
+              <SectionLabel>Why {window.SITE_CONFIG.name}</SectionLabel>
               <SectionH2 id="why-h2" css={{ color: "#ffffff" }}>
                 The Trusted Choice for Home Safety
               </SectionH2>
@@ -1617,7 +1617,7 @@ export default function App() {
       <FooterWrap>
         <FooterGrid>
           <div>
-            <FooterLogo>KAFF</FooterLogo>
+            <FooterLogo>{window.SITE_CONFIG.name}</FooterLogo>
             <p style={{ fontFamily: "var(--wpds-fonts-headline)", fontSize: "1.2rem", color: "#ffffff", marginBottom: "0.5rem", lineHeight: "1.4" }}>Your trusted partner for expert kitchen appliance repair and maintenance.</p>
             <FooterBlurb>
               Certified technicians, genuine parts, and guaranteed satisfaction.
